@@ -1,7 +1,24 @@
 import React from 'react'
 import homeIcon from "../assets/home.svg";
 
+import { useState, useEffect } from "react";
+
+function useWindowWidth() {
+    const [width, setWidth] = useState(window.innerWidth);
+
+    useEffect(() => {
+        const handleResize = () => setWidth(window.innerWidth);
+        window.addEventListener("resize", handleResize);
+
+        // cleanup
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    return width;
+}
+
 export default function Nav() {
+    let width = useWindowWidth()
     return (
         <>
 
@@ -11,20 +28,24 @@ export default function Nav() {
                         <img src={homeIcon} alt="home" className="invert w-9" />
                     </li>
                     <li className="flex flex-grow">
-                        <input
+                        {width > 620 &&
+                         <input
                             type="text"
                             placeholder="What do you want to play?"
                             className="flex-grow border-none rounded-full bg-[#2a2a2a] text-white text-sm px-6 py-3 placeholder:text-[#b3b1aa] placeholder:text-lg"
-                        />
+                        />}
+
                     </li>
                 </ul>
 
                 <ul className="flex gap-5 items-center text-[#cfcbcb] text-xl">
-                    <ul className="flex gap-2 text-sm">
-                        <li>Premium</li>
-                        <li>Support</li>
-                        <li>Download</li>
-                    </ul>
+                    {width > 1024 &&
+                        <ul className="flex gap-2 text-sm">
+                            <li>Premium</li>
+                            <li>Support</li>
+                            <li>Download</li>
+                        </ul>}
+
                     <li>|</li>
                     <ul className="flex gap-5 text-sm items-center">
                         <li>Install App</li>
