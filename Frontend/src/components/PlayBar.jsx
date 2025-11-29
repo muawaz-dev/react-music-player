@@ -7,8 +7,11 @@ import IndexContext from '../context/IndexContext';
 import SongContext from '../context/SongContext';
 
 export default function PlayBar() {
-    const { songsArr, index, setIndex, audioRef, paused, setPaused } = useContext(SongContext)
-    const [range,setRange] = useState()
+    const { songsArr, index, setIndex, audioRef, paused, setPaused, max, current, setCurrent } = useContext(SongContext)
+    function handleRangeChange(e) {
+        setCurrent(e.target.value);
+        audioRef.current.currentTime = e.target.value
+    }
     function handlePlay() {
         if (!paused) {
             audioRef.current.pause()
@@ -35,10 +38,11 @@ export default function PlayBar() {
         }
     }
 
+
     function handlePrev() {
         if (index == 0) {
-            setIndex(songsArr.length-1)
-            audioRef.current.src = "http://localhost:3000" + songsArr[songsArr.length-1].url
+            setIndex(songsArr.length - 1)
+            audioRef.current.src = "http://localhost:3000" + songsArr[songsArr.length - 1].url
             audioRef.current.play()
             setPaused(false)
         }
@@ -51,7 +55,7 @@ export default function PlayBar() {
     }
     return (
         <div className="fixed flex flex-col items-center justify-center bottom-0 left-1 right-[0.25vw] h-12 bg-black">
-            <input type="range" min="0" value={range} step="0.01" className="w-full" />
+            <input onInput={handleRangeChange} type="range" min="0" value={current} max={max} step="0.01" className="w-full" />
             <div className="flex gap-2">
                 <button onClick={handlePrev} className="bg-transparent border-none invert">
                     <img src={prevIcon} alt="" className="w-6" />

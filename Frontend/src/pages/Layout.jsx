@@ -7,23 +7,55 @@ import IndexContext from "../context/IndexContext"
 import SongContext from "../context/SongContext";
 import React from "react";
 function Layout() {
-    const [paused,setPaused] = useState(true)
+    const [paused, setPaused] = useState(true)
     const [songsArr, setSongArr] = useState([])
     const [index, setIndex] = useState(0)
+    const [max, setMax] = useState("")
+    const [current, setCurrent] = useState("")
     const audioRef = useRef(new Audio)
+    const onendRef=useRef(0)
     useEffect(() => {
         fetch("http://localhost:3000/songs-list")
             .then((response) => response.json())
             .then((data) => {
                 setSongArr(data);
-                audioRef.current.src="http://localhost:3000"+data[0].url
-            })
-    }, [])
+                audioRef.current.src = "http://localhost:3000" + data[0].url;
+                audioRef.current.onloadedmetadata = () => {
+                    setMax(audioRef.current.duration)
+                }
+                
+                audioRef.current.onended = () => {
+                    if (data.length - 1 > onendRef.current) {
+                        setIndex(onendRef.current + 1)
+                        audioRef.current.src = "http://localhost:3000" + data[onendRef.current + 1].url
+                        audioRef.current.play()
+                        setPaused(false)
+                    }
+                    else {
+                        setIndex(0)
+                        audioRef.current.src = "http://localhost:3000" + data[0].url
+                        audioRef.current.play()
+                        setPaused(false)
+                    }
+                }
+
+            });
+        audioRef.current.ontimeupdate = () => {
+            setCurrent(audioRef.current.currentTime)
+        }
+    }, []);
+
+    useEffect(()=>{
+        onendRef.current=index
+        console.log("onend:",onendRef.current)
+    },[index])
+
+
     return (
         <>
 
             <Nav />
-            <SongContext.Provider value={{songsArr,index,setIndex,audioRef,paused,setPaused}}>
+            <SongContext.Provider value={{ songsArr, index, setIndex, audioRef, paused, setPaused, max, setMax, current, setCurrent }}>
                 <Outlet />
                 <PlayBar />
             </SongContext.Provider>

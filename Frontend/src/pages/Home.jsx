@@ -1,17 +1,18 @@
-import React, { useEffect,useState,useRef, useContext } from 'react'
+import React, { useContext } from 'react'
 import Nav from '../components/Nav';
 import cardImage from "../assets/cardImage.png"
 import "./style.css"
 import IndexContext from "../context/IndexContext"
 import SongContext from '../context/SongContext';
 export default function Home() {
-    const {songsArr,index,setIndex,audioRef,setPaused} = useContext(SongContext)
-
+    const {songsArr,setIndex,audioRef,setPaused} = useContext(SongContext)
     function handleCardClick(i){    
         setIndex(i);
         audioRef.current.src="http://localhost:3000"+songsArr[i].url
         audioRef.current.play()
         setPaused(false)
+    
+
     }
     return (
         <div className="bg-black text-white">
