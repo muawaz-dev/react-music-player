@@ -11,7 +11,6 @@ function Layout() {
     const [songsArr, setSongArr] = useState([])
     const [index, setIndex] = useState(0)
     const [max, setMax] = useState("")
-    const [current, setCurrent] = useState("")
     const audioRef = useRef(new Audio)
     const onendRef=useRef(0)
     useEffect(() => {
@@ -40,14 +39,11 @@ function Layout() {
                 }
 
             });
-        audioRef.current.ontimeupdate = () => {
-            setCurrent(audioRef.current.currentTime)
-        }
+
     }, []);
 
     useEffect(()=>{
         onendRef.current=index
-        console.log("onend:",onendRef.current)
     },[index])
 
 
@@ -55,7 +51,7 @@ function Layout() {
         <>
 
             <Nav />
-            <SongContext.Provider value={{ songsArr, index, setIndex, audioRef, paused, setPaused, max, setMax, current, setCurrent }}>
+            <SongContext.Provider value={{ songsArr, index, setIndex, audioRef, paused, setPaused, max, setMax }}>
                 <Outlet />
                 <PlayBar />
             </SongContext.Provider>

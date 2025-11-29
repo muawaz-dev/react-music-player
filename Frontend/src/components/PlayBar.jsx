@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useRef, useContext } from 'react'
 import prevIcon from "../assets/previous-Stroke-Rounded.png";
 import playIcon from "../assets/play-Stroke-Rounded.png";
 import pauseIcon from "../assets/pause-Stroke-Rounded.png";
@@ -6,10 +6,17 @@ import nextIcon from "../assets/next-Stroke-Rounded.png";
 import IndexContext from '../context/IndexContext';
 import SongContext from '../context/SongContext';
 
+
 export default function PlayBar() {
-    const { songsArr, index, setIndex, audioRef, paused, setPaused, max, current, setCurrent } = useContext(SongContext)
+    const { songsArr, index, setIndex, audioRef, paused, setPaused, max } = useContext(SongContext)
+    const rangeRef = useRef()
+
+    audioRef.current.ontimeupdate = () => {
+    rangeRef.current.value = (audioRef.current.currentTime)
+
+}
     function handleRangeChange(e) {
-        setCurrent(e.target.value);
+        rangeRef.current.value = (e.target.value);
         audioRef.current.currentTime = e.target.value
     }
     function handlePlay() {
@@ -55,7 +62,7 @@ export default function PlayBar() {
     }
     return (
         <div className="fixed flex flex-col items-center justify-center bottom-0 left-1 right-[0.25vw] h-12 bg-black">
-            <input onInput={handleRangeChange} type="range" min="0" value={current} max={max} step="0.01" className="w-full" />
+            <input ref={rangeRef} onChange={handleRangeChange} type="range" min="0" max={max} defaultValue={0}  step="0.01" className="w-full" />
             <div className="flex gap-2">
                 <button onClick={handlePrev} className="bg-transparent border-none invert">
                     <img src={prevIcon} alt="" className="w-6" />
