@@ -5,7 +5,7 @@ import "./style.css"
 import IndexContext from "../context/IndexContext"
 import SongContext from '../context/SongContext';
 export default function Home() {
-    const {songsArr,setIndex,audioRef,setPaused} = useContext(SongContext)
+    const {songsArr,setIndex,audioRef,setPaused,index,paused} = useContext(SongContext)
     function handleCardClick(i){    
         setIndex(i);
         audioRef.current.src="http://localhost:3000"+songsArr[i].url
@@ -59,10 +59,10 @@ export default function Home() {
                     <p className="font-franklin text-2xl font-bold pt-8 ml-10">Songs</p>
                     <div className="flex flex-wrap gap-5 pt-8 pb-5 justify-center font-sans">
                         {/* Cards go here */}
-                        {songsArr.map(({name},index)=>{
+                        {songsArr.map(({name},i)=>{
                             return (
-                                <div onClick={()=>handleCardClick(index)} id={index} key={index} className='w-[160px]'>
-                                    <img className='rounded-lg' src={cardImage} alt="" />
+                                <div onClick={()=>handleCardClick(i)} id={i} key={i} className='w-[160px]'>
+                                    <img className={i==index && !paused?"invert rounded-lg":'rounded-lg hover:invert transition-filter duration-1000 ease-in'} src={cardImage} alt="" />
                                     <button className='border-none mt-3 font-sans'><h4>{name}</h4></button>
                                 </div>
                             )

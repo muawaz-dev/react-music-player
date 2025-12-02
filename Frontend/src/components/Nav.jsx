@@ -22,7 +22,7 @@ export default function Nav() {
     return (
         <>
 
-            <div className="flex sticky top-0 bg-black px-5 py-2 justify-between gap-8">
+            <div className="z-10 flex sticky top-0 bg-black px-5 py-2 justify-between gap-8">
                 <ul className="flex items-center gap-5 flex-grow list-none">
                     <li>
                         <img src={homeIcon} alt="home" className="invert w-9" />
