@@ -3,7 +3,6 @@ import prevIcon from "../assets/previous-Stroke-Rounded.png";
 import playIcon from "../assets/play-Stroke-Rounded.png";
 import pauseIcon from "../assets/pause-Stroke-Rounded.png";
 import nextIcon from "../assets/next-Stroke-Rounded.png";
-import IndexContext from '../context/IndexContext';
 import SongContext from '../context/SongContext';
 
 
@@ -75,6 +74,7 @@ export default function PlayBar() {
                     <img src={nextIcon} alt="" className="w-6" />
                 </button>
             </div>
+            
         </div>
     )
 }

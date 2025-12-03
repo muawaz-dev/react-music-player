@@ -2,8 +2,8 @@ import React, { useContext } from 'react'
 import Nav from '../components/Nav';
 import cardImage from "../assets/cardImage.png"
 import "./style.css"
-import IndexContext from "../context/IndexContext"
 import SongContext from '../context/SongContext';
+import Volume from '../components/Volume';
 export default function Home() {
     const {songsArr,setIndex,audioRef,setPaused,index,paused} = useContext(SongContext)
     function handleCardClick(i){    
