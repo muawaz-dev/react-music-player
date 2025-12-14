@@ -6,7 +6,6 @@ import volumeMute from "../assets/volume-mute.png"
 export default function Volume() {
   const { volumeActive, setVolumeActive, volume } = useContext(SongContext)
   useEffect(() => {
-    console.log(volumeActive)
     if (volumeActive) {
       const timer = setTimeout(() => {
         setVolumeActive(false);

@@ -4,16 +4,50 @@ import cardImage from "../assets/cardImage.png"
 import "./style.css"
 import SongContext from '../context/SongContext';
 import Volume from '../components/Volume';
+import { useRef, useState } from 'react';
 export default function Home() {
-    const {songsArr,setIndex,audioRef,setPaused,index,paused} = useContext(SongContext)
-    function handleCardClick(i){    
+    const { songsArr,setSongArr, setIndex, audioRef, setPaused, index, paused } = useContext(SongContext)
+    const fileRef = useRef();
+    function handleCardClick(i) {
         setIndex(i);
-        audioRef.current.src="http://localhost:3000"+songsArr[i].url
+        audioRef.current.src = songsArr[i].url
         audioRef.current.play()
         setPaused(false)
-    
-
     }
+
+    function handleFileChange() {
+        const arr= Array.from(fileRef.current.files)
+        const form = new FormData();
+        const check = songsArr.map((song)=>song.name);
+        fileRef.current.value="";
+        for (const item of arr) {
+            if (item.type.includes("audio")) {
+                if(check.includes(item.name)){
+                    alert("A song is already uploaded")
+                    break
+                }
+                form.append("songs", item)
+            }
+            else{
+                alert("Only audio files are allowed.")
+                console.log("Only audio files are allowed.")
+                break
+            }
+        }
+
+        fetch("http://localhost:4000/add-songs",{
+            method:"POST",
+            body:form
+        })
+        .then((response)=>response.json())
+        .then((data)=>{setSongArr(data.songs)})
+        
+    }
+
+    function handleFileClick() {
+        fileRef.current.click()
+    }
+
     return (
         <div className="bg-black text-white">
             {/* Container */}
@@ -56,13 +90,17 @@ export default function Home() {
                 </div>
                 {/* Main */}
                 <div className="bg-[#212121] ml-[37%] rounded-xl border-r-[0.25vw] border-black">
-                    <p className="font-franklin text-2xl font-bold pt-8 ml-10">Songs</p>
+                    <div className='flex gap-6'>
+                        <p className="font-franklin text-2xl font-bold pt-8 ml-10">Songs</p>
+                        <input onChange={handleFileChange} ref={fileRef} type="file" name="songs" multiple className='hidden' />
+                        <button onClick={handleFileClick} className='text-xl p-2 m-7 bg-black rounded-xl'>Upload</button>
+                    </div>
                     <div className="flex flex-wrap gap-5 pt-8 pb-5 justify-center font-sans">
                         {/* Cards go here */}
-                        {songsArr.map(({name},i)=>{
+                        {songsArr.map(({ name }, i) => {
                             return (
-                                <div onClick={()=>handleCardClick(i)} id={i} key={i} className='w-[160px]'>
-                                    <img className={i==index && !paused?"invert rounded-lg":'rounded-lg hover:invert transition-filter duration-1000 ease-in'} src={cardImage} alt="" />
+                                <div onClick={() => handleCardClick(i)} id={i} key={i} className='w-[160px]'>
+                                    <img className={i == index && !paused ? "invert rounded-lg" : 'rounded-lg hover:invert transition-filter duration-1000 ease-in'} src={cardImage} alt="" />
                                     <button className='border-none mt-3 font-sans'><h4>{name}</h4></button>
                                 </div>
                             )

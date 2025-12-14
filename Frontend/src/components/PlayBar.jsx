@@ -32,13 +32,13 @@ export default function PlayBar() {
     function handleNext() {
         if (songsArr.length - 1 > index) {
             setIndex(index + 1)
-            audioRef.current.src = "http://localhost:3000" + songsArr[index + 1].url
+            audioRef.current.src = songsArr[index + 1].url
             audioRef.current.play()
             setPaused(false)
         }
         else {
             setIndex(0)
-            audioRef.current.src = "http://localhost:3000" + songsArr[0].url
+            audioRef.current.src = songsArr[0].url
             audioRef.current.play()
             setPaused(false)
         }
@@ -48,13 +48,13 @@ export default function PlayBar() {
     function handlePrev() {
         if (index == 0) {
             setIndex(songsArr.length - 1)
-            audioRef.current.src = "http://localhost:3000" + songsArr[songsArr.length - 1].url
+            audioRef.current.src = songsArr[songsArr.length - 1].url
             audioRef.current.play()
             setPaused(false)
         }
         else {
             setIndex(index - 1)
-            audioRef.current.src = "http://localhost:3000" + songsArr[index - 1].url
+            audioRef.current.src = songsArr[index - 1].url
             audioRef.current.play()
             setPaused(false)
         }
